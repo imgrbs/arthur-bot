@@ -1,42 +1,19 @@
-
-/**
- * Copyright 2017-present, Facebook, Inc. All rights reserved.
- *
- * This source code is licensed under the license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * Messenger Platform Quick Start Tutorial
- *
- * This is the completed code for the Messenger Platform quick start tutorial
- *
- * https://developers.facebook.com/docs/messenger-platform/getting-started/quick-start/
- *
- * To run this code, you must do the following:
- *
- * 1. Deploy this code to a server running Node.js
- * 2. Run `npm install`
- * 3. Update the VERIFY_TOKEN
- * 4. Add your PAGE_ACCESS_TOKEN to your environment vars
- *
- */
-
 'use strict';
+
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN;
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-// Imports dependencies and set up http server
+const FACEBOOK_API = process.env.FACEBOOK_API;
+
 const
     request = require('request'),
     express = require('express'),
     body_parser = require('body-parser'),
-    app = express().use(body_parser.json()); // creates express http server
+    app = express().use(body_parser.json());
 
-// Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log('webhook is listening'));
 
-// Accepts POST requests at /webhook endpoint
 app.post('/webhook', (req, res) => {
 
-    // Parse the request body from the POST
     let body = req.body;
 
     // Check the webhook event is from a Page subscription
@@ -74,7 +51,6 @@ app.post('/webhook', (req, res) => {
 
 });
 
-// Accepts GET requests at the /webhook endpoint
 app.get('/webhook', (req, res) => {
 
     // Parse params from the webhook verification request
@@ -170,7 +146,7 @@ function callSendAPI(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "uri": FACEBOOK_API + "me/messages",
         "qs": { "access_token": PAGE_ACCESS_TOKEN },
         "method": "POST",
         "json": request_body
